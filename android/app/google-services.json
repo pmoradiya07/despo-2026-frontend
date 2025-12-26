@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "43722331780",
+    "project_id": "desportivos2026",
+    "storage_bucket": "desportivos2026.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43722331780:android:aafa33bc372d20797914d1",
+        "android_client_info": {
+          "package_name": "com.desportivos.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "43722331780-p41iljm9imr0or25a5nh7pe6us50pmdk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS5Gu5xGCg2h0-i2m-D-yxQ3mCvnI25cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "43722331780-p41iljm9imr0or25a5nh7pe6us50pmdk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
