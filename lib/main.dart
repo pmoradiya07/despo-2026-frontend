@@ -1,4 +1,9 @@
+import 'package:despo/home.dart';
+import 'package:despo/liveupdates.dart';
 import 'package:despo/login.dart';
+import 'package:despo/map.dart';
+import 'package:despo/notifspage.dart';
+import 'package:despo/profilepage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,7 +27,7 @@ class HomePage extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: const LoginPage(),
+          home: const LoginScreen(),
         );
       },
     );
@@ -38,15 +43,59 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyApp> {
+int selectedIndex = 0;
+
+  final List<Widget> screens = const [
+    HomeScreen(),
+    MapScreen(),
+    LiveUpdates(),
+    NotifsScreen(),
+    ProfileScreen(),
+  ];
+
+    final List<IconData> icons = const [
+    Icons.home,
+    Icons.map,
+    Icons.pin_drop,
+    Icons.notifications,
+    Icons.person,
+  ];
+
+  void onItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+      body: screens[selectedIndex],
+      bottomNavigationBar: Container(
+        height: 100,
+        decoration: const BoxDecoration(
+          color: Colors.black,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(
+            icons.length,
+            (index) => InkWell(
+              onTap: () {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+              child: Icon(
+                icons[index],
+                size: 28,
+                color: selectedIndex == index
+                    ? Colors.white
+                    : Colors.grey,
+              ),
+            ),)
+        ),
       ),
-      body: Container()
     );
   }
 }

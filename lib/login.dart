@@ -1,21 +1,20 @@
+import 'package:despo/home.dart';
+import 'package:despo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // 1️⃣ Background Image
           Positioned.fill(
-            child: Image.asset(
-              'assets/images/bg_image.png', // Your background image
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/images/bg_image.png', fit: BoxFit.cover),
           ),
           Positioned.fill(
             child: Opacity(
@@ -51,19 +50,13 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Logo / torch icon
-                const Icon(
-                  Icons.wb_incandescent_rounded,
-                  size: 80,
-                  color: Colors.orangeAccent,
-                ),
-                const SizedBox(height: 30),
+                SvgPicture.asset('assets/svg/despo_logo.svg'),
+                SizedBox(height: 30.h),
 
-                // Login Card Container
                 Container(
                   width: 300.w,
-                  height: 350.h,
-                  padding: const EdgeInsets.all(24),
+                  height: 330.h,
+                  padding: EdgeInsets.all(20.sp),
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(255, 195, 255, 1),
                     borderRadius: BorderRadius.circular(16),
@@ -71,7 +64,7 @@ class LoginPage extends StatelessWidget {
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
                         blurRadius: 8,
-                        offset: const Offset(0, 4),
+                        offset: Offset(0, 4),
                       ),
                     ],
                   ),
@@ -110,29 +103,51 @@ class LoginPage extends StatelessWidget {
                       Center(
                         child: GestureDetector(
                           onTap: () {
-                            //  SIGN IN LOGIC HERE
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MyApp(title: ''),
+                              ),
+                            );
                             debugPrint("Sign In clicked");
                           },
                           child: SizedBox(
-                            width: 231.w,
+                            width: 225.w,
                             height: 46.h,
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
-                                Positioned(
-                                  child: Image.asset(
-                                    'assets/images/signin.png',
-                                    fit: BoxFit.contain,
-                                  ),
+                                Stack(
+                                  children: [
+                                    Positioned(
+                                      right: 22,
+                                      //top: ,
+                                      child: Image.asset(
+                                        'assets/images/outsignin.png',
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 25,
+                                      top: 2,
+                                      child: Image.asset(
+                                        'assets/images/signin.png',
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ],
                                 ),
 
-                                Text(
-                                  "SIGN IN",
-                                  style: GoogleFonts.jersey10(
-                                    fontSize: 22.sp,
-                                    color: Colors.white,
-                                    height: 1,
-                                    letterSpacing: 1,
+                                Positioned(
+                                  top: 10,
+                                  child: Text(
+                                    "Sign In",
+                                    style: GoogleFonts.jersey10(
+                                      fontSize: 22.sp,
+                                      color: Colors.white,
+                                      height: 1,
+                                      letterSpacing: 1,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -144,9 +159,9 @@ class LoginPage extends StatelessWidget {
                       Center(
                         child: Text(
                           "Don't have an account? Sign Up",
-                          style: TextStyle(
+                          style: GoogleFonts.jersey10(
                             color: Colors.purple,
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -155,7 +170,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
 
                 // Social Login Icons
                 Row(
@@ -192,6 +207,7 @@ class LoginPage extends StatelessWidget {
         style: GoogleFonts.inter(
           color: Colors.black,
           fontWeight: FontWeight.w400,
+          fontSize: 10.sp,
         ),
       ),
     );
@@ -202,13 +218,10 @@ class LoginPage extends StatelessWidget {
       obscureText: isObscure,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.grey),
+        hintStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 9.sp),
         fillColor: Colors.white,
         filled: true,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 10,
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
