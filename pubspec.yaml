@@ -73,6 +73,7 @@ flutter:
     - assets/svg/despo_logo.svg
     - assets/images/welcomedespo.png
     - assets/images/profilecard.png
+    - assets/images/logout.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
