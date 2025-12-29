@@ -2,16 +2,22 @@ import 'package:despo/features/home/home_page.dart';
 import 'package:despo/features/live_updates/liveupdates_page.dart';
 import 'package:despo/features/auth/login_page.dart';
 import 'package:despo/features/map/map_page.dart';
-import 'package:despo/features/notifications/notifspage.dart';
+import 'package:despo/features/notifications/notifsscreen.dart';
 import 'package:despo/features/profile/profilepage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const HomePage());
+
+  runApp(
+    const ProviderScope(
+      child: HomePage(),
+    ),
+  );
 }
 
 
