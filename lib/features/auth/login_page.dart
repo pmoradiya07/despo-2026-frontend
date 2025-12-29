@@ -1,4 +1,4 @@
-import 'package:despo/home.dart';
+import 'package:despo/features/home/home_page.dart';
 import 'package:despo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
