@@ -35,6 +35,17 @@ class NotificationsNotifier extends Notifier<NotificationState> {
       );
     }
   }
+
+  Future<void> markAsRead(String notificationID) async {
+    try {
+      await _firestore
+          .collection('notifications')
+          .doc(notificationID)
+          .update({'read' : true});
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }
 
 final notificationsProvider =
