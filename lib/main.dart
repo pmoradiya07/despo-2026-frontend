@@ -1,3 +1,4 @@
+import 'package:despo/features/auth/authGate.dart';
 import 'package:despo/features/home/home_page.dart';
 import 'package:despo/features/live_updates/liveupdates_page.dart';
 import 'package:despo/features/auth/login_page.dart';
@@ -33,7 +34,7 @@ class HomePage extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: const LoginScreen(),
+          home: const AuthGate(),
         );
       },
     );
@@ -51,11 +52,11 @@ class MyApp extends StatefulWidget {
 class _MyHomePageState extends State<MyApp> {
 int selectedIndex = 0;
 
-  final List<Widget> screens = const [
-    HomeScreen(),
-    MapScreen(),
-    LiveUpdates(),
-    NotifsScreen(),
+  final List<Widget> screens =  [
+    const HomeScreen(),
+    const MapScreen(),
+    const LiveUpdates(),
+    const NotifsScreen(),
     ProfileScreen(),
   ];
 

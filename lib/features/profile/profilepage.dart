@@ -1,9 +1,14 @@
+import 'package:despo/features/auth/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+   ProfileScreen({super.key});
+
+  final AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +72,9 @@ class ProfileScreen extends StatelessWidget {
                 ProfileCardWidget(),
                 SizedBox(height: 350.h),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () async {
+                    await authService.signOut();
+                  },
                   child: Image.asset("assets/images/logout.png"),
                 ),
                 TextButton(

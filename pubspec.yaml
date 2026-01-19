@@ -1,5 +1,5 @@
 name: despo
-description: "A new Flutter project."
+description: "The Official App of Desportivos 2026"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -42,6 +42,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.2.3
   flutter_riverpod: ^3.1.0
+  google_sign_in: ^7.2.0
 
 dev_dependencies:
   flutter_test:
