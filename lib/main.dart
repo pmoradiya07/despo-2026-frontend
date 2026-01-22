@@ -10,20 +10,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'features/splash/splashScreen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
   runApp(
     const ProviderScope(
-      child: HomePage(),
+      child: AppRoot(),
     ),
   );
 }
 
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class AppRoot extends StatelessWidget {
+  const AppRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,11 @@ class HomePage extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: const AuthGate(),
+          home: const SplashScreen(),
+          routes: {
+            '/auth': (_) => const AuthGate(),
+          },
+
         );
       },
     );

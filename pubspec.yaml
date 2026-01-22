@@ -77,6 +77,9 @@ flutter:
     - assets/images/welcomedespo.png
     - assets/images/profilecard.png
     - assets/images/logout.png
+    - assets/splash/d_body.png
+    - assets/splash/flame.png
+    - assets/splash/splashBackground.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
