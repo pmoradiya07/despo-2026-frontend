@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "43722331780-oitkljfgsmmj9dlc07ce17ooqbqg5qul.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.desportivos.app",
+            "certificate_hash": "3951abf56c47303c9d31b13a533b82cf39ef1a65"
+          }
+        },
+        {
+          "client_id": "43722331780-uossp2j16f16t30gvrjaprhoe79ohrv6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.desportivos.app",
+            "certificate_hash": "cbc164d65d77e51afad82d1a02f3186b0450bddf"
+          }
+        },
+        {
           "client_id": "43722331780-p41iljm9imr0or25a5nh7pe6us50pmdk.apps.googleusercontent.com",
           "client_type": 3
         }
