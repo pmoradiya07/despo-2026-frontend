@@ -80,6 +80,16 @@ flutter:
     - assets/splash/d_body.png
     - assets/splash/flame.png
     - assets/splash/splashBackground.png
+    - assets/nav/home.png
+    - assets/nav/home_active.png
+    - assets/nav/map.png
+    - assets/nav/map_active.png
+    - assets/nav/notifs.png
+    - assets/nav/notifs_active.png
+    - assets/nav/profile.png
+    - assets/nav/profile_active.png
+    - assets/nav/live.png
+    - assets/nav/live_active.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

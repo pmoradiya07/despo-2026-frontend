@@ -133,32 +133,35 @@ class _SplashScreenState extends State<SplashScreen>
                     EmberPainter(_embers, _dt(), _exiting, _rng),
                     size: const Size(80, 120),
                   ),),
-                  Opacity(
-                    opacity: 1.0 - _exitProgress,
-                    child: Transform.translate(
-                      offset: Offset(0, _dYOffset()),
-                      child: Transform.scale(
-                        scale: _dScale(),
-                        child: RawImage(
-                          image: dImage,
-                          filterQuality: FilterQuality.none,
-                        ),
+                  Transform.translate(
+                    offset: Offset(0, _dYOffset()),
+                    child: Transform.scale(
+                      scale: _dScale() * (1.0 + _exitProgress * 20.0),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          RawImage(
+                            image: dImage,
+                            filterQuality: FilterQuality.none,
+                          ),
+                          Positioned(
+                            top: -140,
+                            child: CustomPaint(
+                              painter: FlamePainter(
+                                flameImage,
+                                _elapsed,
+                                _exitProgress,
+                              ),
+                              size: Size(
+                                flameImage.width.toDouble(),
+                                flameImage.height.toDouble(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: -140,
-                      child: CustomPaint(
-                        painter: FlamePainter(
-                          flameImage,
-                          _elapsed,
-                          _exitProgress,
-                        ),
-                        size: Size(
-                          flameImage.width.toDouble(),
-                          flameImage.height.toDouble(),
-                        ),
-                      ),
                   )
                 ],
               ),

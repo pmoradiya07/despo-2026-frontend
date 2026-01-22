@@ -14,3 +14,7 @@ class NotificationPageColors {
   static const Color notificationSubtextRead = Color(0xFFDC7DDC);
   static const Color notificationSubtextUnread = Color(0xFFFBFF00);
 }
+
+class NavbarColors {
+  static const Color navBarSelectedText = Color(0xffFFBE26);
+}

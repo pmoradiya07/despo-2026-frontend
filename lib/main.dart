@@ -47,68 +47,68 @@ class AppRoot extends StatelessWidget {
   }
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyApp> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyApp> {
-int selectedIndex = 0;
-
-  final List<Widget> screens =  [
-    const HomeScreen(),
-    const MapScreen(),
-    const LiveUpdates(),
-    const NotifsScreen(),
-    ProfileScreen(),
-  ];
-
-    final List<IconData> icons = const [
-    Icons.home,
-    Icons.map,
-    Icons.pin_drop,
-    Icons.notifications,
-    Icons.person,
-  ];
-
-  void onItemTapped(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: screens[selectedIndex],
-      bottomNavigationBar: Container(
-        height: 100,
-        decoration: const BoxDecoration(
-          color: Colors.black,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: List.generate(
-            icons.length,
-            (index) => InkWell(
-              onTap: () {
-                setState(() {
-                  selectedIndex = index;
-                });
-              },
-              child: Icon(
-                icons[index],
-                size: 28,
-                color: selectedIndex == index
-                    ? Colors.white
-                    : Colors.grey,
-              ),
-            ),)
-        ),
-      ),
-    );
-  }
-}
+// class MyApp extends StatefulWidget {
+//   const MyApp({super.key, required this.title});
+//   final String title;
+//
+//   @override
+//   State<MyApp> createState() => _MyHomePageState();
+// }
+//
+// class _MyHomePageState extends State<MyApp> {
+// int selectedIndex = 0;
+//
+//   final List<Widget> screens =  [
+//     const HomeScreen(),
+//     const MapScreen(),
+//     const LiveUpdates(),
+//     const NotifsScreen(),
+//     ProfileScreen(),
+//   ];
+//
+//     final List<IconData> icons = const [
+//     Icons.home,
+//     Icons.map,
+//     Icons.pin_drop,
+//     Icons.notifications,
+//     Icons.person,
+//   ];
+//
+//   void onItemTapped(int index) {
+//     setState(() {
+//       selectedIndex = index;
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: screens[selectedIndex],
+//       bottomNavigationBar: Container(
+//         height: 100,
+//         decoration: const BoxDecoration(
+//           color: Colors.black,
+//         ),
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceAround,
+//           children: List.generate(
+//             icons.length,
+//             (index) => InkWell(
+//               onTap: () {
+//                 setState(() {
+//                   selectedIndex = index;
+//                 });
+//               },
+//               child: Icon(
+//                 icons[index],
+//                 size: 28,
+//                 color: selectedIndex == index
+//                     ? Colors.white
+//                     : Colors.grey,
+//               ),
+//             ),)
+//         ),
+//       ),
+//     );
+//   }
+// }

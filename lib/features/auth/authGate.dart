@@ -1,7 +1,6 @@
+import 'package:despo/core/navigation/AppShell.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../../main.dart';
 import 'login_page.dart';
 
 class AuthGate extends StatelessWidget{
@@ -19,7 +18,7 @@ class AuthGate extends StatelessWidget{
         }
 
         if (snapshot.hasData) {
-          return const MyApp(title: 'Despo');
+          return const AppShell();
         }
 
         return const LoginScreen();

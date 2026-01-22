@@ -37,4 +37,21 @@ class NotificationPageFonts {
     fontWeight: FontWeight.w400,
     letterSpacing: 0.96,
   );
+
+
+}
+
+class NavBarFonts {
+  static const TextStyle navBarUnselected = TextStyle(
+    color: Colors.white,
+    fontSize: 15,
+    fontFamily: 'Jersey 10',
+    letterSpacing: 0.96,
+  );
+  static const TextStyle navBarSelected = TextStyle(
+    color: NavbarColors.navBarSelectedText,
+    fontSize: 15,
+    fontFamily: 'Jersey 10',
+    letterSpacing: 0.96,
+  );
 }

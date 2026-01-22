@@ -1,6 +1,5 @@
+import 'package:despo/core/navigation/AppShell.dart';
 import 'package:despo/features/auth/auth_service.dart';
-import 'package:despo/features/home/home_page.dart';
-import 'package:despo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -127,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen>{
 
                               if(userCredential != null && mounted){
                                 Navigator.pushReplacement(context, 
-                                MaterialPageRoute(builder: (context) => MyApp(title: '')));
+                                MaterialPageRoute(builder: (context) => const AppShell()));
 
                                 debugPrint("Sign in successful: ${userCredential.user?.email}");
                               } else {
