@@ -1,12 +1,21 @@
-import 'package:despo/home.dart';
-import 'package:despo/main.dart';
+import 'package:despo/core/navigation/AppShell.dart';
+import 'package:despo/features/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen>{
+
+  final AuthService _authService = AuthService();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +64,7 @@ class LoginScreen extends StatelessWidget {
 
                 Container(
                   width: 300.w,
-                  height: 330.h,
+                  height: 190.h,
                   padding: EdgeInsets.all(20.sp),
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(255, 195, 255, 1),
@@ -76,40 +85,74 @@ class LoginScreen extends StatelessWidget {
                           "Welcome To\nDesportivos",
                           textAlign: TextAlign.center,
                           style: GoogleFonts.jersey10(
-                            fontSize: 29.65.sp,
+                            fontSize: 35.sp,
                             height: 0.65.h,
                             color: Colors.black,
                           ),
                         ),
                       ),
-                      SizedBox(height: 5.h),
-                      _buildLabel("Email"),
-                      _buildTextField("Enter your email"),
-                      SizedBox(height: 5.h),
-                      _buildLabel("Password"),
-                      _buildTextField("Enter your password", isObscure: true),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Forgot Password?",
-                          style: GoogleFonts.jersey10(
-                            color: Color.fromRGBO(142, 0, 133, 1),
-                            fontSize: 15.sp,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
+                      // SizedBox(height: 5.h),
+                      // _buildLabel("Email"),
+                      // _buildTextField("Enter your email"),
+                      // SizedBox(height: 5.h),
+                      // _buildLabel("Password"),
+                      // _buildTextField("Enter your password", isObscure: true),
+                      // TextButton(
+                      //   onPressed: () {},
+                      //   child: Text(
+                      //     "Forgot Password?",
+                      //     style: GoogleFonts.jersey10(
+                      //       color: Color.fromRGBO(142, 0, 133, 1),
+                      //       fontSize: 15.sp,
+                      //       decoration: TextDecoration.underline,
+                      //     ),
+                      //   ),
+                      // ),
+
+                      SizedBox(
+                        height: 20.h,
                       ),
 
                       Center(
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MyApp(title: ''),
-                              ),
-                            );
-                            debugPrint("Sign In clicked");
+                          onTap: _isLoading ? null : () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            debugPrint("Sign In Clicked");
+
+                            try {
+                              final userCredential = await _authService.signInWithGoogle();
+
+                              if(userCredential != null && mounted){
+                                Navigator.pushReplacement(context, 
+                                MaterialPageRoute(builder: (context) => const AppShell()));
+
+                                debugPrint("Sign in successful: ${userCredential.user?.email}");
+                              } else {
+                                debugPrint("Sign in Cancelled");
+                              }
+
+                            }
+                            catch (e) {
+                              debugPrint("Sign in error $e");
+                              if (mounted){
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content:
+                                  Text("Failed to Sign-In, Please Try Again"),
+                                    backgroundColor: Colors.red,
+                                  )
+                                );
+                              }
+                            }
+                            finally {
+                              if(mounted) {
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              }
+                            }
+
                           },
                           child: SizedBox(
                             width: 225.w,
@@ -158,7 +201,7 @@ class LoginScreen extends StatelessWidget {
 
                       Center(
                         child: Text(
-                          "Don't have an account? Sign Up",
+                          "Use the Google Account you registered with",
                           style: GoogleFonts.jersey10(
                             color: Colors.purple,
                             fontSize: 12.sp,
@@ -173,24 +216,24 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(height: 30.h),
 
                 // Social Login Icons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    3,
-                    (index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.circle,
-                          color: Colors.grey[300],
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: List.generate(
+                //     3,
+                //     (index) => Padding(
+                //       padding: const EdgeInsets.symmetric(horizontal: 10),
+                //       child: CircleAvatar(
+                //         radius: 20,
+                //         backgroundColor: Colors.white,
+                //         child: Icon(
+                //           Icons.circle,
+                //           color: Colors.grey[300],
+                //           size: 20,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

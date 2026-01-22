@@ -1,5 +1,5 @@
 name: despo
-description: "A new Flutter project."
+description: "The Official App of Desportivos 2026"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -41,6 +41,9 @@ dependencies:
   cloud_firestore: ^6.1.1
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.2.3
+  flutter_riverpod: ^3.1.0
+  google_sign_in: ^7.2.0
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +77,19 @@ flutter:
     - assets/images/welcomedespo.png
     - assets/images/profilecard.png
     - assets/images/logout.png
+    - assets/splash/d_body.png
+    - assets/splash/flame.png
+    - assets/splash/splashBackground.png
+    - assets/nav/home.png
+    - assets/nav/home_active.png
+    - assets/nav/map.png
+    - assets/nav/map_active.png
+    - assets/nav/notifs.png
+    - assets/nav/notifs_active.png
+    - assets/nav/profile.png
+    - assets/nav/profile_active.png
+    - assets/nav/live.png
+    - assets/nav/live_active.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -86,10 +102,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+     - family: Jersey 10
+       fonts:
+         - asset: assets/fonts/Jersey10-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
@@ -100,3 +116,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_icons:
+  android: true
+  image_path_android: lib/assets/icons/despoAppLogoForeground.png
+  adaptive_icon_foreground: lib/assets/icons/despoAppLogoForeground.png
+  adaptive_icon_background: lib/assets/icons/despoAppLogoBackground.png
