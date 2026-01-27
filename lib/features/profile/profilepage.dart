@@ -1,11 +1,13 @@
 import 'package:despo/features/auth/auth_service.dart';
+import 'package:despo/features/profile/contactus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
 class ProfileScreen extends StatelessWidget {
-   ProfileScreen({super.key});
+  ProfileScreen({super.key});
 
   final AuthService authService = AuthService();
 
@@ -85,7 +87,14 @@ class ProfileScreen extends StatelessWidget {
                   child: Image.asset("assets/images/logout.png"),
                 ),
                 TextButton(
-                  onPressed: () => showCallPopup(context),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ContactUsScreen(),
+                      ),
+                    );
+                  },
                   child: Text(
                     "Contact Us",
                     style: GoogleFonts.jersey10(
@@ -118,69 +127,12 @@ class PixelDashLine extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(
             count,
-            (index) => Container(
-              width: dotSize,
-              height: dotSize,
-              color: color,
-            ),
+            (index) => Container(width: dotSize, height: dotSize, color: color),
           ),
         );
       },
     );
   }
-}
-
-void showCallPopup(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    backgroundColor: Colors.black87,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (context) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.call, color: Colors.green),
-              title: Text(
-                'Abhas Chaudhary',
-                style: GoogleFonts.jersey10(
-                  color: Colors.white,
-                  fontSize: 20.sp,
-                ),
-              ),
-              subtitle: Text(
-                'Fest Head',
-                style: TextStyle(color: Colors.white70),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.call, color: Colors.green),
-              title: Text(
-                'Arnav Rinawa',
-                style: GoogleFonts.jersey10(
-                  color: Colors.white,
-                  fontSize: 20.sp,
-                ),
-              ),
-              subtitle: Text(
-                'Fest Head',
-                style: TextStyle(color: Colors.white70),
-              ),
-              onTap: () {
-                // Navigator.pop(context);
-                // makeCall('+919123456789');
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
 }
 
 class ProfileCardWidget extends StatelessWidget {
@@ -204,10 +156,12 @@ class ProfileCardWidget extends StatelessWidget {
             children: [
               Text("Name : ", style: GoogleFonts.jersey10()),
               Column(
-                
                 children: [
                   Text("Panth Moradia", style: GoogleFonts.jersey10()),
-                  SizedBox(width: 150.w, child: PixelDashLine(color: Colors.black,)),
+                  SizedBox(
+                    width: 150.w,
+                    child: PixelDashLine(color: Colors.black),
+                  ),
                 ],
               ),
               SizedBox(width: 20.h),
@@ -223,7 +177,10 @@ class ProfileCardWidget extends StatelessWidget {
               Column(
                 children: [
                   Text("LNMIIT", style: GoogleFonts.jersey10()),
-                  SizedBox(width: 140.w, child: PixelDashLine(color: Colors.black,)),
+                  SizedBox(
+                    width: 140.w,
+                    child: PixelDashLine(color: Colors.black),
+                  ),
                 ],
               ),
               SizedBox(width: 20.h),
@@ -237,10 +194,12 @@ class ProfileCardWidget extends StatelessWidget {
             children: [
               Text("Accomodation : ", style: GoogleFonts.jersey10()),
               Column(
-                
                 children: [
                   Text("YES", style: GoogleFonts.jersey10()),
-                  SizedBox(width: 100.w, child: PixelDashLine(color: Colors.black,)),
+                  SizedBox(
+                    width: 100.w,
+                    child: PixelDashLine(color: Colors.black),
+                  ),
                 ],
               ),
               SizedBox(width: 20.h),
@@ -254,10 +213,12 @@ class ProfileCardWidget extends StatelessWidget {
             children: [
               Text("Mess : ", style: GoogleFonts.jersey10()),
               Column(
-                
                 children: [
                   Text("NO", style: GoogleFonts.jersey10()),
-                  SizedBox(width: 150.w, child: PixelDashLine(color: Colors.black,)),
+                  SizedBox(
+                    width: 150.w,
+                    child: PixelDashLine(color: Colors.black),
+                  ),
                 ],
               ),
               SizedBox(width: 20.h),
@@ -271,10 +232,12 @@ class ProfileCardWidget extends StatelessWidget {
             children: [
               Text("Pronite : ", style: GoogleFonts.jersey10()),
               Column(
-                
                 children: [
                   Text("YES", style: GoogleFonts.jersey10()),
-                  SizedBox(width: 140.w, child: PixelDashLine(color: Colors.black,)),
+                  SizedBox(
+                    width: 140.w,
+                    child: PixelDashLine(color: Colors.black),
+                  ),
                 ],
               ),
               SizedBox(width: 20.h),
