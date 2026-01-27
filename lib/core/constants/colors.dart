@@ -18,3 +18,7 @@ class NotificationPageColors {
 class NavbarColors {
   static const Color navBarSelectedText = Color(0xffFFBE26);
 }
+
+class AdminPageColors{
+  static const Color adminPageBG = Color(0xFF2D012D);
+}

@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
@@ -71,7 +71,15 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 ProfileCardWidget(),
-                SizedBox(height: 350.h),
+                SizedBox(height: 300.h),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/admin');
+                  },
+                  child: Image.asset("assets/images/admin.png"),
+                ),
+
+                SizedBox(height: 10.h),
                 GestureDetector(
                   onTap: () async {
                     await authService.signOut();

@@ -1,27 +1,31 @@
+import 'package:despo/features/admin/admin_page.dart';
 import 'package:despo/features/auth/authGate.dart';
-import 'package:despo/features/home/home_page.dart';
-import 'package:despo/features/live_updates/liveupdates_page.dart';
-import 'package:despo/features/auth/login_page.dart';
-import 'package:despo/features/map/map_page.dart';
-import 'package:despo/features/notifications/notifsscreen.dart';
-import 'package:despo/features/profile/profilepage.dart';
+import 'package:despo/services/firebase_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'features/admin/LiveEventsScheduler.dart';
+import 'features/admin/notifications_scheduler.dart';
+import 'features/notifications/notification_bridge.dart';
 import 'features/splash/splashScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final ProviderContainer providerContainer = ProviderContainer();
+  NotificationsBridge.register(providerContainer);
+  await FirebaseService.init();
 
   runApp(
-    const ProviderScope(
-      child: AppRoot(),
+    UncontrolledProviderScope(
+      container: providerContainer,
+      child: const AppRoot(),
     ),
   );
 }
+
 
 
 class AppRoot extends StatelessWidget {
@@ -39,6 +43,9 @@ class AppRoot extends StatelessWidget {
           home: const SplashScreen(),
           routes: {
             '/auth': (_) => const AuthGate(),
+            '/admin': (_) => const AdminPage(),
+            '/adminLive': (_) => const LiveEventScheduler(),
+            '/adminNotifications': (_) => const NotificationsScheduler(),
           },
 
         );
