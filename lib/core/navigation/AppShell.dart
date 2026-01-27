@@ -22,7 +22,7 @@ class AppShell extends ConsumerWidget {
         index: currentTab,
         children: [
           const HomeScreen(),
-          const MapScreen(),
+           MapScreen(),
           const LiveUpdates(),
           const NotifsScreen(),
           ProfileScreen(),
