@@ -5,22 +5,28 @@ class NotificationState {
   final List<AppNotification> notifications;
   final String? error;
 
+  final Map<String, bool> readState;
+
   const NotificationState({
     required this.isLoading,
-    required this.error,
-    required this.notifications
+    this.error,
+    required this.notifications,
+    required this.readState,
 
 });
 
+
+
   factory NotificationState.initial() {
-    return const NotificationState(isLoading: false, error: null, notifications: []);
+    return const NotificationState(isLoading: false, error: null, notifications: [], readState: {});
   }
 
   NotificationState copyWith ({
     bool? isLoading,
     List<AppNotification>? notifications,
     String? error,
+    Map<String, bool>? readState,
 }){
-    return NotificationState(isLoading:  isLoading ?? this.isLoading, error: error ?? this.error, notifications: notifications ?? this.notifications);
+    return NotificationState(isLoading:  isLoading ?? this.isLoading, error: error, notifications: notifications ?? this.notifications, readState: readState ?? this.readState);
   }
 }

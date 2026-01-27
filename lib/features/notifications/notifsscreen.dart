@@ -22,6 +22,11 @@ class NotifsScreen extends ConsumerStatefulWidget {
 // TODO Offline caching
 
 class _NotifsScreenState extends ConsumerState<NotifsScreen> {
+
+  Future<void> _refresh() async {
+    await ref.read(notificationsProvider.notifier).fetchNotifications();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -30,12 +35,13 @@ class _NotifsScreenState extends ConsumerState<NotifsScreen> {
     Future.microtask(() {
       ref.read(notificationsProvider.notifier).fetchNotifications();
     });
+
+
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(notificationsProvider);
-
     return Scaffold(
       body: Stack(
         children: [
@@ -107,17 +113,23 @@ class _NotifsScreenState extends ConsumerState<NotifsScreen> {
               // 🟢 DATA STATE
               else
                 Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: 20.h),
-                    itemCount: state.notifications.length,
-                    itemBuilder: (context, index) {
-                      final n = state.notifications[index];
-                      return NotificationBox(message: n.message, title: n.title, createdAt: n.createdAt,  isRead: n.isRead,
-                          onTap: () {
+                  child: RefreshIndicator(
+                    color: Colors.black,
+                    onRefresh: _refresh,
+                    child: ListView.builder(
+                      padding: EdgeInsets.only(top: 20.h),
+                      physics: AlwaysScrollableScrollPhysics(),
+                      itemCount: state.notifications.length,
+                      itemBuilder: (context, index) {
+                        final n = state.notifications[index];
+                        final isRead = state.readState[n.id] ?? false;
+                        return NotificationBox(message: n.message, title: n.title, createdAt: n.createdAt,  isRead: isRead,
+                            onTap: () {
                               ref.read(notificationsProvider.notifier).markAsRead(n.id);
-                          }, location: '',
-                      );
-                    },
+                            }, location: '',
+                        );
+                      },
+                    ),
                   ),
                 ),
             ],
@@ -160,7 +172,7 @@ class NotificationBox extends StatelessWidget{
   final String message;
   final DateTime createdAt;
   final bool isRead;
-  final String location;
+  final String? location;
   final VoidCallback onTap;
 
   const NotificationBox({

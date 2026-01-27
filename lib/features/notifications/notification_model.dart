@@ -5,7 +5,6 @@ class AppNotification {
   final String title;
   final String message;
   final DateTime createdAt;
-  final bool isRead;
   final String? location;
 
   AppNotification({
@@ -13,7 +12,6 @@ class AppNotification {
     required this.title,
     required this.message,
     required this.createdAt,
-    required this.isRead,
     this.location,
 }
 ) ;
@@ -30,7 +28,6 @@ class AppNotification {
       message: (data['body'] ?? '') as String,
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ??
           DateTime.now(),
-      isRead: (data['read'] ?? false) as bool,
     );
   }
 
