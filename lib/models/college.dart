@@ -11,7 +11,7 @@ class CollegeRules {
 }
 
 final Map<String, CollegeRules> collegeRules = {
-  "lnmiit": CollegeRules(accommodation: true, pronite: true, mess: false),
+  "lnmiit": CollegeRules(accommodation: true, pronite: true, mess: true),
   "anand international college of engineering ": CollegeRules(accommodation: false, pronite: true, mess: true),
   "shri agrasen snatkottar shiksha mahavidyalaya": CollegeRules(accommodation: true, pronite: false, mess: true),
 };
