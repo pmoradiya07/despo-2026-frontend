@@ -1,10 +1,10 @@
 import 'package:despo/features/auth/auth_service.dart';
 import 'package:despo/features/profile/contactus.dart';
+import 'package:despo/models/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
@@ -13,9 +13,12 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final User? user = authService.currentUser;
+
     return Scaffold(
       body: Stack(
         children: [
+          /// Background layers
           Positioned.fill(
             child: Image.asset('assets/images/bg_image.png', fit: BoxFit.cover),
           ),
@@ -48,6 +51,8 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
           ),
+
+          /// Content
           Center(
             child: Column(
               children: [
@@ -70,8 +75,36 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 20.h),
-                ProfileCardWidget(),
-                SizedBox(height: 300.h),
+
+                /// Profile Card with live API
+                if (user != null)
+                  FutureBuilder<Map<String, dynamic>>(
+                    future: authService.fetchProfileByEmail(user.email!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator(color: Colors.white);
+                      }
+                      if (snapshot.hasError || !snapshot.hasData) {
+                        return const Text(
+                          "Failed to load profile",
+                          style: TextStyle(color: Colors.white),
+                        );
+                      }
+
+                      final data = snapshot.data!;
+
+                      return ProfileCardWidget(
+                        name: data['name'],
+                        college: data['college'],
+                        accommodation: data['accommodation'],
+                        mess: data['mess'],
+                        pronite: data['pronite'],
+                      );
+                    },
+                  ),
+
+                SizedBox(height: 30.h),
+
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, '/admin');
@@ -112,31 +145,22 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class PixelDashLine extends StatelessWidget {
-  const PixelDashLine({super.key, required this.color});
-  final Color color;
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        const double dotSize = 1.0;
-        const double spacing = 1.0;
-        final int count = (constraints.maxWidth / (dotSize + spacing)).floor();
-
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(
-            count,
-            (index) => Container(width: dotSize, height: dotSize, color: color),
-          ),
-        );
-      },
-    );
-  }
-}
-
+/// Profile Card Widget
 class ProfileCardWidget extends StatelessWidget {
-  const ProfileCardWidget({super.key});
+  final String name;
+  final String college;
+  final bool accommodation;
+  final bool mess;
+  final bool pronite;
+
+  const ProfileCardWidget({
+    super.key,
+    required this.name,
+    required this.college,
+    required this.accommodation,
+    required this.mess,
+    required this.pronite,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -157,17 +181,17 @@ class ProfileCardWidget extends StatelessWidget {
               Text("Name : ", style: GoogleFonts.jersey10()),
               Column(
                 children: [
-                  Text("Panth Moradia", style: GoogleFonts.jersey10()),
+                  Text(name, style: GoogleFonts.jersey10()),
                   SizedBox(
                     width: 150.w,
                     child: PixelDashLine(color: Colors.black),
                   ),
                 ],
               ),
-              SizedBox(width: 20.h),
             ],
           ),
         ),
+
         Positioned(
           top: 35.h,
           left: 110.w,
@@ -176,36 +200,36 @@ class ProfileCardWidget extends StatelessWidget {
               Text("College : ", style: GoogleFonts.jersey10()),
               Column(
                 children: [
-                  Text("LNMIIT", style: GoogleFonts.jersey10()),
+                  Text(college, style: GoogleFonts.jersey10()),
                   SizedBox(
                     width: 140.w,
                     child: PixelDashLine(color: Colors.black),
                   ),
                 ],
               ),
-              SizedBox(width: 20.h),
             ],
           ),
         ),
+
         Positioned(
           top: 60.h,
           left: 110.w,
           child: Row(
             children: [
-              Text("Accomodation : ", style: GoogleFonts.jersey10()),
+              Text("Accommodation : ", style: GoogleFonts.jersey10()),
               Column(
                 children: [
-                  Text("YES", style: GoogleFonts.jersey10()),
+                  Text(accommodation ? "YES" : "NO", style: GoogleFonts.jersey10()),
                   SizedBox(
                     width: 100.w,
                     child: PixelDashLine(color: Colors.black),
                   ),
                 ],
               ),
-              SizedBox(width: 20.h),
             ],
           ),
         ),
+
         Positioned(
           top: 85.h,
           left: 110.w,
@@ -214,17 +238,17 @@ class ProfileCardWidget extends StatelessWidget {
               Text("Mess : ", style: GoogleFonts.jersey10()),
               Column(
                 children: [
-                  Text("NO", style: GoogleFonts.jersey10()),
+                  Text(mess ? "YES" : "NO", style: GoogleFonts.jersey10()),
                   SizedBox(
                     width: 150.w,
                     child: PixelDashLine(color: Colors.black),
                   ),
                 ],
               ),
-              SizedBox(width: 20.h),
             ],
           ),
         ),
+
         Positioned(
           top: 110.h,
           left: 110.w,
@@ -233,18 +257,42 @@ class ProfileCardWidget extends StatelessWidget {
               Text("Pronite : ", style: GoogleFonts.jersey10()),
               Column(
                 children: [
-                  Text("YES", style: GoogleFonts.jersey10()),
+                  Text(pronite ? "YES" : "NO", style: GoogleFonts.jersey10()),
                   SizedBox(
                     width: 140.w,
                     child: PixelDashLine(color: Colors.black),
                   ),
                 ],
               ),
-              SizedBox(width: 20.h),
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Pixel Dash Line
+class PixelDashLine extends StatelessWidget {
+  const PixelDashLine({super.key, required this.color});
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const double dotSize = 1.0;
+        const double spacing = 1.0;
+        final int count = (constraints.maxWidth / (dotSize + spacing)).floor();
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(
+            count,
+            (index) => Container(width: dotSize, height: dotSize, color: color),
+          ),
+        );
+      },
     );
   }
 }
