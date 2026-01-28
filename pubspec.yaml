@@ -103,6 +103,7 @@ flutter:
     - assets/images/sabhay.jpg
     - assets/images/kirti.jpg
     - assets/images/hatim.jpg
+    - assets/images/insta.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

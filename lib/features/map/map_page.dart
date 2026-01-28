@@ -45,7 +45,6 @@ class MapScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// 🎮 Header
           Row(
             children: [
                Icon(Icons.sports_esports,
@@ -63,7 +62,6 @@ class MapScreen extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          /// 🏀 Sports Chips
           Wrap(
             spacing: 10,
             runSpacing: 10,
@@ -131,8 +129,8 @@ class MapScreen extends StatelessWidget {
       "y": 0.60,
       "color": Colors.red,
       "sports": ["Basketball", "Volleyball", "Lawn Tennis"],
-      "lat": 26.9366,
-      "lng": 75.9235,
+      "lat": 26.9332228,
+      "lng": 75.9225218,
     },
     {
       "name": "Ground",
@@ -140,8 +138,8 @@ class MapScreen extends StatelessWidget {
       "y": 0.48,
       "color": Colors.red,
       "sports": ["Football", "Cricket"],
-      "lat": 26.9370,
-      "lng": 75.9240,
+      "lat": 26.9309085,
+      "lng": 75.9210756,
     },
     {
       "name": "SAC",
@@ -149,8 +147,8 @@ class MapScreen extends StatelessWidget {
       "y": 0.50,
       "color": Colors.red,
       "sports": ["Badminton", "Squash", "Table Tennis", "Carrom", "Chess"],
-      "lat": 26.9350,
-      "lng": 75.9220,
+      "lat": 26.9330068,
+      "lng": 75.9229518,
     },
     {
       "name": "Academic Lawn",
@@ -158,8 +156,8 @@ class MapScreen extends StatelessWidget {
       "y": 0.41,
       "color": Colors.red,
       "sports": ["Kabaddi"],
-      "lat": 26.9360,
-      "lng": 75.9250,
+      "lat": 26.9351666,
+      "lng": 75.9227061,
     },
   ];
 
@@ -170,7 +168,6 @@ class MapScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          /// Background layers (UNCHANGED)
           Positioned.fill(
             child: Image.asset(
               'assets/images/bg_image.png',
@@ -206,7 +203,6 @@ class MapScreen extends StatelessWidget {
             ),
           ),
 
-          /// 📍 Pins
           ...venues.map((v) {
             return Positioned(
               left: size.width * v["x"],

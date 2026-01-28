@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,6 +37,13 @@ class _HomeScreenState extends State<HomeScreen> {
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOut,
       );
+    }
+  }
+
+  Future<void> _openInstagram() async {
+    final Uri url = Uri.parse('https://www.instagram.com/desportivos.lnmiit/?hl=en');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch Instagram';
     }
   }
 
@@ -115,6 +123,52 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.white,
                       fontSize: 15.sp,
                       height: 1.25,
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 30.h),
+
+                GestureDetector(
+                  onTap: _openInstagram,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.w),
+                    padding: EdgeInsets.symmetric(vertical: 14.h),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14.r),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFFF58529), // Insta orange
+                          Color(0xFFDD2A7B), // Insta pink
+                          Color(0xFF8134AF), // Insta purple
+                          Color(0xFF515BD4), // Insta blue
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.pinkAccent.withOpacity(0.5),
+                          blurRadius: 10,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Follow us on Instagram",
+                          style: GoogleFonts.leagueSpartan(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        SizedBox(width: 5.w),
+                        Image.asset("assets/images/insta.png", width: 30.w, height: 30.h,)
+                      ],
                     ),
                   ),
                 ),
