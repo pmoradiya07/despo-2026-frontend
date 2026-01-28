@@ -10,9 +10,8 @@ class CollegeRules {
   });
 }
 
-// Hardcoded college rules
 final Map<String, CollegeRules> collegeRules = {
-  "LNMIIT": CollegeRules(accommodation: true, pronite: true, mess: false),
-  "Anand international college of engineering ": CollegeRules(accommodation: false, pronite: true, mess: true),
-  "Shri Agrasen snatkottar shiksha Mahavidyalaya": CollegeRules(accommodation: true, pronite: false, mess: true),
+  "lnmiit": CollegeRules(accommodation: true, pronite: true, mess: false),
+  "anand international college of engineering ": CollegeRules(accommodation: false, pronite: true, mess: true),
+  "shri agrasen snatkottar shiksha mahavidyalaya": CollegeRules(accommodation: true, pronite: false, mess: true),
 };

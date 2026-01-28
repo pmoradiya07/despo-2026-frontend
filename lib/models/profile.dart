@@ -18,20 +18,25 @@ class Profile {
     required this.mess,
   });
 
-  // Build Profile using API response + Flutter rules
   factory Profile.fromApi(Map<String, dynamic> json) {
-    String college = json['college'] ?? "";
+    print("🟡 FULL API JSON: $json");
 
-    // Get rules for this college
-    final rules = collegeRules[college] ?? CollegeRules();
+    String rawCollege = json['college'] ?? "";
+    print("🟢 College from API: '$rawCollege'");
+
+    String normalizedCollege = rawCollege.trim().toLowerCase();
+    print("🔵 Normalized college: '$normalizedCollege'");
+
+    final rules = collegeRules[normalizedCollege];
+    print("🟣 Rules found: ${rules != null}");
 
     return Profile(
       name: json['name'] ?? "",
       email: json['email'] ?? "",
-      college: college,
-      accommodation: rules.accommodation,
-      pronite: rules.pronite,
-      mess: rules.mess,
+      college: rawCollege,
+      accommodation: rules?.accommodation ?? false,
+      pronite: rules?.pronite ?? false,
+      mess: rules?.mess ?? false,
     );
   }
 }
