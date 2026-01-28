@@ -72,7 +72,6 @@ class ProfileScreen extends StatelessWidget {
 
                 SizedBox(height: 20.h),
 
-                /// 🔥 LIVE PROFILE FROM SHEET
                 if (user != null)
                   FutureBuilder<Map<String, dynamic>>(
                     future: authService.fetchProfileByEmail(user.email!),
@@ -89,13 +88,12 @@ class ProfileScreen extends StatelessWidget {
                       }
 
                       final data = snapshot.data!;
-
                       return ProfileCardWidget(
                         name: data['name'] ?? '',
                         college: data['college'] ?? '',
-                        accommodation: data['accommodation'] ?? 'No',
-                        mess: data['mess'] ?? 'No',
-                        pronite: data['pronite'] ?? 'No',
+                        accommodation: data['accommodation'] ?? false,
+                        mess: data['mess'] ?? false,
+                        pronite: data['pronite'] ?? false,
                       );
                     },
                   ),
@@ -114,6 +112,11 @@ class ProfileScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () async {
                     await authService.signOut();
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/auth',
+                      (route) => false,
+                    );
                   },
                   child: Image.asset("assets/images/logout.png"),
                 ),
@@ -142,13 +145,14 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-/// 🟨 PROFILE CARD
+
+/// Profile Card Widget
 class ProfileCardWidget extends StatelessWidget {
   final String name;
   final String college;
-  final String accommodation;
-  final String mess;
-  final String pronite;
+  final bool accommodation;
+  final bool mess;
+  final bool pronite;
 
   const ProfileCardWidget({
     super.key,
@@ -172,9 +176,9 @@ class ProfileCardWidget extends StatelessWidget {
 
         _row(10.h, "Name", name),
         _row(35.h, "College", college),
-        _row(60.h, "Accommodation", accommodation),
-        _row(85.h, "Mess", mess),
-        _row(110.h, "Pronite", pronite),
+        _row(60.h, "Accommodation", accommodation ? "YES" : "NO"),
+        _row(85.h, "Mess", mess ? "YES" : "NO"),
+        _row(110.h, "Pronite", pronite ? "YES" : "NO"),
       ],
     );
   }
@@ -188,7 +192,7 @@ class ProfileCardWidget extends StatelessWidget {
           Text("$label : ", style: GoogleFonts.jersey10()),
           Column(
             children: [
-              Text(value.toUpperCase(), style: GoogleFonts.jersey10()),
+              Text(value, style: GoogleFonts.jersey10()),
               SizedBox(
                 width: 140.w,
                 child: PixelDashLine(color: Colors.black),
