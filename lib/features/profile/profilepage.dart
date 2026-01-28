@@ -1,6 +1,5 @@
 import 'package:despo/features/auth/auth_service.dart';
 import 'package:despo/features/profile/contactus.dart';
-import 'package:despo/models/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +17,6 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          /// Background layers
           Positioned.fill(
             child: Image.asset('assets/images/bg_image.png', fit: BoxFit.cover),
           ),
@@ -43,20 +41,17 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-            child: Opacity(
-              opacity: 1,
-              child: Image.asset(
-                'assets/images/shadowcover.png',
-                fit: BoxFit.cover,
-              ),
+            child: Image.asset(
+              'assets/images/shadowcover.png',
+              fit: BoxFit.cover,
             ),
           ),
 
-          /// Content
           Center(
             child: Column(
               children: [
                 SizedBox(height: 50.h),
+
                 Row(
                   children: [
                     SizedBox(width: 20.w),
@@ -66,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                       "Profile",
                       style: GoogleFonts.jersey10(
                         fontSize: 25.sp,
-                        color: Color.fromRGBO(255, 190, 38, 1),
+                        color: const Color.fromRGBO(255, 190, 38, 1),
                       ),
                     ),
                     SizedBox(width: 10.w),
@@ -74,9 +69,10 @@ class ProfileScreen extends StatelessWidget {
                     SizedBox(width: 20.w),
                   ],
                 ),
+
                 SizedBox(height: 20.h),
 
-                /// Profile Card with live API
+                /// 🔥 LIVE PROFILE FROM SHEET
                 if (user != null)
                   FutureBuilder<Map<String, dynamic>>(
                     future: authService.fetchProfileByEmail(user.email!),
@@ -84,9 +80,10 @@ class ProfileScreen extends StatelessWidget {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator(color: Colors.white);
                       }
+
                       if (snapshot.hasError || !snapshot.hasData) {
                         return const Text(
-                          "Failed to load profile",
+                          "Profile not found",
                           style: TextStyle(color: Colors.white),
                         );
                       }
@@ -94,11 +91,11 @@ class ProfileScreen extends StatelessWidget {
                       final data = snapshot.data!;
 
                       return ProfileCardWidget(
-                        name: data['name'],
-                        college: data['college'],
-                        accommodation: data['accommodation'],
-                        mess: data['mess'],
-                        pronite: data['pronite'],
+                        name: data['name'] ?? '',
+                        college: data['college'] ?? '',
+                        accommodation: data['accommodation'] ?? 'No',
+                        mess: data['mess'] ?? 'No',
+                        pronite: data['pronite'] ?? 'No',
                       );
                     },
                   ),
@@ -113,19 +110,19 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 SizedBox(height: 10.h),
+
                 GestureDetector(
                   onTap: () async {
                     await authService.signOut();
                   },
                   child: Image.asset("assets/images/logout.png"),
                 ),
+
                 TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => ContactUsScreen(),
-                      ),
+                      MaterialPageRoute(builder: (_) => ContactUsScreen()),
                     );
                   },
                   child: Text(
@@ -145,13 +142,13 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-/// Profile Card Widget
+/// 🟨 PROFILE CARD
 class ProfileCardWidget extends StatelessWidget {
   final String name;
   final String college;
-  final bool accommodation;
-  final bool mess;
-  final bool pronite;
+  final String accommodation;
+  final String mess;
+  final String pronite;
 
   const ProfileCardWidget({
     super.key,
@@ -173,106 +170,38 @@ class ProfileCardWidget extends StatelessWidget {
           fit: BoxFit.contain,
         ),
 
-        Positioned(
-          top: 10.h,
-          left: 110.w,
-          child: Row(
-            children: [
-              Text("Name : ", style: GoogleFonts.jersey10()),
-              Column(
-                children: [
-                  Text(name, style: GoogleFonts.jersey10()),
-                  SizedBox(
-                    width: 150.w,
-                    child: PixelDashLine(color: Colors.black),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        Positioned(
-          top: 35.h,
-          left: 110.w,
-          child: Row(
-            children: [
-              Text("College : ", style: GoogleFonts.jersey10()),
-              Column(
-                children: [
-                  Text(college, style: GoogleFonts.jersey10()),
-                  SizedBox(
-                    width: 140.w,
-                    child: PixelDashLine(color: Colors.black),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        Positioned(
-          top: 60.h,
-          left: 110.w,
-          child: Row(
-            children: [
-              Text("Accommodation : ", style: GoogleFonts.jersey10()),
-              Column(
-                children: [
-                  Text(accommodation ? "YES" : "NO", style: GoogleFonts.jersey10()),
-                  SizedBox(
-                    width: 100.w,
-                    child: PixelDashLine(color: Colors.black),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        Positioned(
-          top: 85.h,
-          left: 110.w,
-          child: Row(
-            children: [
-              Text("Mess : ", style: GoogleFonts.jersey10()),
-              Column(
-                children: [
-                  Text(mess ? "YES" : "NO", style: GoogleFonts.jersey10()),
-                  SizedBox(
-                    width: 150.w,
-                    child: PixelDashLine(color: Colors.black),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        Positioned(
-          top: 110.h,
-          left: 110.w,
-          child: Row(
-            children: [
-              Text("Pronite : ", style: GoogleFonts.jersey10()),
-              Column(
-                children: [
-                  Text(pronite ? "YES" : "NO", style: GoogleFonts.jersey10()),
-                  SizedBox(
-                    width: 140.w,
-                    child: PixelDashLine(color: Colors.black),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+        _row(10.h, "Name", name),
+        _row(35.h, "College", college),
+        _row(60.h, "Accommodation", accommodation),
+        _row(85.h, "Mess", mess),
+        _row(110.h, "Pronite", pronite),
       ],
+    );
+  }
+
+  Widget _row(double top, String label, String value) {
+    return Positioned(
+      top: top,
+      left: 110.w,
+      child: Row(
+        children: [
+          Text("$label : ", style: GoogleFonts.jersey10()),
+          Column(
+            children: [
+              Text(value.toUpperCase(), style: GoogleFonts.jersey10()),
+              SizedBox(
+                width: 140.w,
+                child: PixelDashLine(color: Colors.black),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
 
-/// Pixel Dash Line
+/// Pixel dashed line
 class PixelDashLine extends StatelessWidget {
   const PixelDashLine({super.key, required this.color});
   final Color color;
@@ -281,15 +210,15 @@ class PixelDashLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        const double dotSize = 1.0;
-        const double spacing = 1.0;
-        final int count = (constraints.maxWidth / (dotSize + spacing)).floor();
+        const double dotSize = 1;
+        const double spacing = 1;
+        final count = (constraints.maxWidth / (dotSize + spacing)).floor();
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(
             count,
-            (index) => Container(width: dotSize, height: dotSize, color: color),
+            (_) => Container(width: dotSize, height: dotSize, color: color),
           ),
         );
       },

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:despo/models/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,34 +11,29 @@ class AuthService {
   User? get currentUser => _auth.currentUser;
 
   // ------------------------
-  // Provider for Riverpod
+  // Riverpod Provider
   final authServiceProvider = Provider<AuthService>((ref) {
     return AuthService();
   });
 
   // ------------------------
-  // Google Sign-In
+  // Google Sign-In (UNCHANGED)
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      // Initialize Google Sign-In
       await GoogleSignIn.instance.initialize();
 
-      // Trigger the authentication flow
       final GoogleSignInAccount? googleUser =
           await GoogleSignIn.instance.authenticate();
 
-      if (googleUser == null) return null; // User cancelled
+      if (googleUser == null) return null;
 
-      // Get auth details
       final GoogleSignInAuthentication googleAuth =
           googleUser.authentication;
 
-      // Create a new credential
       final OAuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
 
-      // Sign in to Firebase
       return await _auth.signInWithCredential(credential);
     } catch (e) {
       print('Error signing in with Google: $e');
@@ -54,10 +48,8 @@ class AuthService {
     await _auth.signOut();
   }
 
-  // ------------------------
-  // 🔥 Fetch profile by email from Google Sheet API
   static const String profileApiUrl =
-      "https://script.google.com/macros/s/AKfycbyUjk7ZlUXXV7zBKvUKg_Qfty7KlY-1-Vmi6cF6SAU1_rrBbFyJ2sqWaVDCfczPhAPEFw/exec"; // Replace with your Apps Script URL
+      "https://script.google.com/macros/s/AKfycbxhxW8bB8VGEtgGs21-NwrHe18iH5QrsV7dvXoxN_0xPEy99JZP_pq002TZYuLT3DGg/exec";
 
   Future<Map<String, dynamic>> fetchProfileByEmail(String email) async {
     try {
@@ -65,24 +57,23 @@ class AuthService {
       final response = await http.get(uri);
 
       if (response.statusCode != 200) {
-        throw Exception("API request failed with status ${response.statusCode}");
+        throw Exception("API failed: ${response.statusCode}");
       }
 
-      final json = jsonDecode(response.body);
+      final Map<String, dynamic> json =
+          jsonDecode(response.body);
 
-      if (json['error'] != null) {
-        throw Exception(json['error']);
+      if (json['status'] != 'ready') {
+        throw Exception("Profile not found");
       }
 
-      // Convert JSON to Profile model
-      final profile = Profile.fromApi(json);
-
+      // 🔹 Return RAW values from sheet
       return {
-        "name": profile.name,
-        "college": profile.college,
-        "accommodation": profile.accommodation,
-        "mess": profile.mess,
-        "pronite": profile.pronite,
+        "name": json['name'] ?? '',
+        "college": json['college'] ?? '',
+        "mess": json['mess'] ?? 'No',
+        "accommodation": json['accommodation'] ?? 'No',
+        "pronite": json['pronite'] ?? 'No',
       };
     } catch (e) {
       print("Error fetching profile: $e");
