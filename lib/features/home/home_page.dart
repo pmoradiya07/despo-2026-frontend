@@ -16,12 +16,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Replace these URLs with your GitHub images
   final List<String> galleryImages = [
-    "https://raw.githubusercontent.com/USERNAME/REPO/main/images/1.jpg",
-    "https://raw.githubusercontent.com/USERNAME/REPO/main/images/2.jpg",
-    "https://raw.githubusercontent.com/USERNAME/REPO/main/images/3.jpg",
-    "https://raw.githubusercontent.com/USERNAME/REPO/main/images/4.jpg",
+    "https://raw.githubusercontent.com/pmoradiya07/despo-2026-frontend/refs/heads/main/assets/images/despo1.jpg",
+    "https://raw.githubusercontent.com/pmoradiya07/despo-2026-frontend/refs/heads/main/assets/images/despo2.jpg",
+    "https://raw.githubusercontent.com/pmoradiya07/despo-2026-frontend/refs/heads/main/assets/images/despo3.jpg",
+    "https://raw.githubusercontent.com/pmoradiya07/despo-2026-frontend/refs/heads/main/assets/images/despo4.jpg",
+    "https://raw.githubusercontent.com/pmoradiya07/despo-2026-frontend/refs/heads/main/assets/images/despo5.jpg",
+    "https://raw.githubusercontent.com/pmoradiya07/despo-2026-frontend/refs/heads/main/assets/images/despo6.jpg",
+    "https://raw.githubusercontent.com/pmoradiya07/despo-2026-frontend/refs/heads/main/assets/images/despo8.jpg",
+    "https://raw.githubusercontent.com/pmoradiya07/despo-2026-frontend/refs/heads/main/assets/images/despo9.jpg",
+    "https://raw.githubusercontent.com/pmoradiya07/despo-2026-frontend/refs/heads/main/assets/images/despo10.jpg",
   ];
-
   void _prevImage() {
     if (_currentIndex > 0) {
       _pageController.previousPage(

@@ -159,6 +159,24 @@ class MapScreen extends StatelessWidget {
       "lat": 26.9351666,
       "lng": 75.9227061,
     },
+    {
+      "name": "BH 1",
+      "x": 0.62,
+      "y": 0.61,
+      "color": Colors.red,
+      "sports": [""],
+      "lat": 26.9337286,
+      "lng": 75.9224424,
+    },
+    {
+      "name": "GH",
+      "x": 0.28,
+      "y": 0.68,
+      "color": Colors.red,
+      "sports": [""],
+      "lat": 26.9350734,
+      "lng": 75.9225033,
+    },
   ];
 
   @override
