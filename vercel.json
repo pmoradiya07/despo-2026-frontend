@@ -1,4 +1,13 @@
 {
+  "builds": [
+    {
+      "src": "pubspec.yaml",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build/web"
+      }
+    }
+  ],
   "routes": [
     {
       "src": "/(.*\\.(js|css|json|png|jpg|jpeg|gif|ico|svg|map|wasm))",
