@@ -1,62 +1,80 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
-  User? get currentUser => _auth.currentUser;
+  // ------------------------
+  // GOOGLE SIGN IN (ANDROID + WEB + iOS WEB)
+  // Mobile sign-in (returns UserCredential)
+  Future<UserCredential?> signInWithGoogleMobile() async {
+  try {
+    final GoogleAuthProvider provider = GoogleAuthProvider()
+      ..addScope('email')
+      ..addScope('profile');
 
-  final authServiceProvider = Provider<AuthService>((ref) {
-    return AuthService();
-  });
+    return await FirebaseAuth.instance.signInWithProvider(provider);
+  } catch (e) {
+    debugPrint("Mobile Google sign-in failed: $e");
+    return null;
+  }
+}
 
-  // Google Sign-In
-  Future<UserCredential?> signInWithGoogle() async {
+
+  // Web sign-in (redirect)
+  Future<void> signInWithGoogleWeb() async {
+    final GoogleAuthProvider provider = GoogleAuthProvider()
+      ..addScope('email')
+      ..addScope('profile');
+
     try {
-      await GoogleSignIn.instance.initialize();
-
-      final GoogleSignInAccount? googleUser =
-          await GoogleSignIn.instance.authenticate();
-
-      if (googleUser == null) return null;
-
-      final GoogleSignInAuthentication googleAuth =
-          googleUser.authentication;
-
-      final OAuthCredential credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-      );
-
-      return await _auth.signInWithCredential(credential);
+      await _auth.signInWithRedirect(provider);
     } catch (e) {
-      print('Error signing in with Google: $e');
+      debugPrint("Web Google sign-in failed: $e");
       rethrow;
     }
   }
 
+  // Unified method for login
+  Future<void> signInWithGoogle() async {
+    if (kIsWeb) {
+      await signInWithGoogleWeb();
+    } else {
+      await signInWithGoogleMobile();
+    }
+  }
+
+  // Web only: handle redirect result
+  Future<UserCredential?> handleWebRedirectResult() async {
+    if (!kIsWeb) return null;
+
+    try {
+      return await _auth.getRedirectResult();
+    } catch (e) {
+      debugPrint("Redirect result error: $e");
+      return null;
+    }
+  }
+
   // ------------------------
-  // Sign Out
+  // SIGN OUT
   Future<void> signOut() async {
-    await GoogleSignIn.instance.signOut();
     await _auth.signOut();
   }
 
   // ------------------------
-  // Fetch profile from Google Sheet
+  // GOOGLE SHEET PROFILE FETCH
   static const String profileApiUrl =
       "https://script.google.com/macros/s/AKfycbxhxW8bB8VGEtgGs21-NwrHe18iH5QrsV7dvXoxN_0xPEy99JZP_pq002TZYuLT3DGg/exec";
 
- Future<Map<String, dynamic>> fetchProfileByEmail(String email) async {
-  try {
+  Future<Map<String, dynamic>> fetchProfileByEmail(String email) async {
     final uri = Uri.parse("$profileApiUrl?email=$email");
     final response = await http.get(uri);
 
     if (response.statusCode != 200) {
-      throw Exception("API failed: ${response.statusCode}");
+      throw Exception("Profile API error");
     }
 
     final Map<String, dynamic> json = jsonDecode(response.body);
@@ -65,22 +83,15 @@ class AuthService {
       throw Exception("Profile not found");
     }
 
-    // 🔹 Convert fields to boolean properly
-    bool parseYesNo(String? value) {
-      if (value == null) return false;
-      final clean = value.trim().toLowerCase();
-      return clean == 'yes';
-    }
+    bool yesNo(String? v) =>
+        v != null && v.trim().toLowerCase() == 'yes';
 
     return {
       "name": json['name'] ?? '',
       "college": json['college'] ?? '',
-      "mess": parseYesNo(json['mess']),
-      "accommodation": parseYesNo(json['accommodation']),
-      "pronite": parseYesNo(json['pronite']),
+      "mess": yesNo(json['mess']),
+      "accommodation": yesNo(json['accommodation']),
+      "pronite": yesNo(json['pronite']),
     };
-  } catch (e) {
-    print("Error fetching profile: $e");
-    rethrow;
   }
- }}
+}

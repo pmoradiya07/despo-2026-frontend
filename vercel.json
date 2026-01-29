@@ -3,19 +3,26 @@
     {
       "src": "pubspec.yaml",
       "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build/web"
-      }
+      "config": { "distDir": "build/web" }
     }
   ],
-  "routes": [
+  "rewrites": [
+    { "source": "/:file*", "destination": "/index.html" }
+  ],
+  "headers": [
     {
-      "src": "/(.*\\.(js|css|json|png|jpg|jpeg|gif|ico|svg|map|wasm))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/:all*(js|css|json|png|jpg|jpeg|gif|ico|svg|map|wasm)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
     }
-  ]
+  ],
+  "env": {
+    "FIREBASE_API_KEY": "AIzaSyC2sSBkTIpS-ZLU6qWRwOVGwH_S-Za6vSA",
+    "FIREBASE_AUTH_DOMAIN": "desportivos2026.firebaseapp.com",
+    "FIREBASE_PROJECT_ID": "desportivos2026",
+    "FIREBASE_STORAGE_BUCKET": "desportivos2026.firebasestorage.app",
+    "FIREBASE_MESSAGING_ID": "43722331780",
+    "FIREBASE_APP_ID": "1:43722331780:web:13130138d554b5367914d1"
+  }
 }

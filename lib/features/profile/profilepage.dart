@@ -12,7 +12,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = authService.currentUser;
+    final User? user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
       body: Stack(
