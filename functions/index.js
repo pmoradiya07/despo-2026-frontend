@@ -1,32 +1,137 @@
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+
+admin.initializeApp();
+
+const db = admin.firestore();
+const messaging = admin.messaging();
+
+
+exports.onNotificationUpdated = functions.firestore
+    .document("notifications/{id}")
+    .onUpdate(async (change) => {
+      const before = change.before.data();
+      const after = change.after.data();
+      const ref = change.after.ref;
+
+      // React only to status changes → pending
+      if (before.status === after.status) {
+        return null;
+      }
+
+      if (after.status !== "pending") {
+        return null;
+      }
+
+      // Guard: scheduled but not due yet
+      if (
+        after.type === "scheduled" &&
+        after.scheduledAt &&
+        after.scheduledAt.toDate() > new Date()
+      ) {
+        return null;
+      }
+
+      // Lock document
+      await ref.update({status: "processing"});
+
+      try {
+        const tokens = await getTargetTokens(after.target);
+
+        if (tokens.length === 0) {
+          throw new Error("No target tokens found");
+        }
+
+        const response = await messaging.sendEachForMulticast({
+          tokens: tokens,
+          notification: {
+            title: after.title,
+            body: after.body,
+          },
+        });
+
+        await ref.update({
+          status: "sent",
+          sentAt: admin.firestore.FieldValue.serverTimestamp(),
+          stats: {
+            success: response.successCount,
+            failure: response.failureCount,
+          },
+        });
+      } catch (err) {
+        await ref.update({
+          status: "failed",
+          failureReason: err.message,
+        });
+      }
+
+      return null;
+    });
+
 /**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
+ * Resolves FCM tokens for a given target group.
+ * @param {string} target Target audience (all | test)
+ * @return {Promise<string[]>} Array of FCM tokens
  */
+async function getTargetTokens(target) {
+  let query = db.collection("users");
 
-const {setGlobalOptions} = require("firebase-functions");
-const {onRequest} = require("firebase-functions/https");
-const logger = require("firebase-functions/logger");
+  if (target === "test") {
+    query = query.where("isTestUser", "==", true);
+  }
 
-// For cost control, you can set the maximum number of containers that can be
-// running at the same time. This helps mitigate the impact of unexpected
-// traffic spikes by instead downgrading performance. This limit is a
-// per-function limit. You can override the limit for each function using the
-// `maxInstances` option in the function's options, e.g.
-// `onRequest({ maxInstances: 5 }, (req, res) => { ... })`.
-// NOTE: setGlobalOptions does not apply to functions using the v1 API. V1
-// functions should each use functions.runWith({ maxInstances: 10 }) instead.
-// In the v1 API, each function can only serve one request per container, so
-// this will be the maximum concurrent request count.
-setGlobalOptions({ maxInstances: 10 });
+  const snap = await query.get();
+  const tokens = [];
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+  snap.forEach((doc) => {
+    const token = doc.data().fcmToken;
+    if (token) {
+      tokens.push(token);
+    }
+  });
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+  return tokens;
+}
+
+/**
+ * Cron job that promotes due scheduled notifications.
+ */
+exports.scheduledNotificationRunner = functions.pubsub
+    .schedule("every 1 minutes")
+    .onRun(async () => {
+      const now = admin.firestore.Timestamp.now();
+
+      const snap = await db
+          .collection("notifications")
+          .where("type", "==", "scheduled")
+          .where("status", "==", "pending")
+          .where("scheduledAt", "<=", now)
+          .get();
+
+      if (snap.empty) {
+        return null;
+      }
+
+      const batch = db.batch();
+
+      snap.docs.forEach((doc) => {
+        batch.update(doc.ref, {status: "queued"});
+      });
+
+      await batch.commit();
+
+      const queuedSnap = await db
+          .collection("notifications")
+          .where("status", "==", "queued")
+          .get();
+
+      const reBatch = db.batch();
+
+      queuedSnap.docs.forEach((doc) => {
+        reBatch.update(doc.ref, {status: "pending"});
+      });
+
+      await reBatch.commit();
+
+      return null;
+    });
