@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "43722331780-3vd2mq1t5j2nhmeorti3183d10g2u72u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.desportivos.app",
+            "certificate_hash": "af8fdbc595b6de298074707b8a455792d0658e34"
+          }
+        },
+        {
           "client_id": "43722331780-oitkljfgsmmj9dlc07ce17ooqbqg5qul.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
