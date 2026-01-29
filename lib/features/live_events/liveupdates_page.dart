@@ -68,7 +68,7 @@ class LiveUpdates extends ConsumerWidget {
                   const Expanded(child: PixelDashLine()),
                   SizedBox(width: 10.w),
                   Text(
-                    "Live Updates",
+                    "Live Events",
                     style: GoogleFonts.jersey10(
                       fontSize: 25.sp,
                       color: const Color.fromRGBO(255, 190, 38, 1),
