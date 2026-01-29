@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/home/home_page.dart';
-import '../../features/live_updates/liveupdates_page.dart';
+import '../../features/live_events/liveupdates_page.dart';
 import '../../features/map/map_page.dart';
 import '../../features/notifications/notifsscreen.dart';
 import '../../features/profile/profilepage.dart';
