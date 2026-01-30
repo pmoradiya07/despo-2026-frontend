@@ -1,7 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/foundation.dart';
 
-import '../features/notifications/notification_bridge.dart';
+import '../features/notifications/notification_bridge_stub.dart' if (dart.library.io) '../features/notifications/notification_bridge_mobile.dart';
+
 
 
 class FirebaseService {
@@ -10,18 +12,26 @@ class FirebaseService {
 
   static Future<void> init() async {
     await _messaging.requestPermission();
-    const androidSettings =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+    
+    if (!kIsWeb) {
+      const androidSettings =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const initSettings =
-    InitializationSettings(android: androidSettings);
+      const initSettings =
+      InitializationSettings(android: androidSettings);
 
-    await _localNotifications.initialize(settings: initSettings);
+      await _localNotifications.initialize(
+        settings: initSettings,
+        onDidReceiveNotificationResponse: (details) {},
+      );
+    }
 
     FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
 
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+    if (!kIsWeb) {
+      FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+    }
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       final data = message.data;
@@ -57,21 +67,24 @@ class FirebaseService {
     final notification = message.notification;
     if (notification == null) return;
 
-    const androidDetails = AndroidNotificationDetails(
-      'default_channel',
-      'Notifications',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
+    // Only show local notifications on non-web platforms
+    if (!kIsWeb) {
+      const androidDetails = AndroidNotificationDetails(
+        'default_channel',
+        'Notifications',
+        importance: Importance.max,
+        priority: Priority.high,
+      );
 
-    const details = NotificationDetails(android: androidDetails);
+      const details = NotificationDetails(android: androidDetails);
 
-    await _localNotifications.show(
-      id: notification.hashCode,
-      title: notification.title,
-      body: notification.body,
-      notificationDetails: details,
-    );
+      await _localNotifications.show(
+        id: notification.hashCode,
+        title: notification.title,
+        body: notification.body,
+        notificationDetails: details,
+      );
+    }
   }
 }
 

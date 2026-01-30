@@ -23,14 +23,14 @@ class AuthService {
 }
 
 
-  // Web sign-in (redirect)
+  // Web sign-in (popup)
   Future<void> signInWithGoogleWeb() async {
     final GoogleAuthProvider provider = GoogleAuthProvider()
       ..addScope('email')
       ..addScope('profile');
 
     try {
-      await _auth.signInWithRedirect(provider);
+      await _auth.signInWithPopup(provider);
     } catch (e) {
       debugPrint("Web Google sign-in failed: $e");
       rethrow;

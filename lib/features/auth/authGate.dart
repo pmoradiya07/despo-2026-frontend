@@ -1,9 +1,10 @@
 import 'package:despo/core/navigation/AppShell.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 
-class AuthGate extends StatelessWidget{
+class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
   @override
@@ -26,3 +27,5 @@ class AuthGate extends StatelessWidget{
     );
   }
 }
+
+

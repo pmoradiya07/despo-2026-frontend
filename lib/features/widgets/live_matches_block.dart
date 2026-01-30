@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../services/live_admin_services.dart';
+import '../../core/widgets/event_card.dart';
 
 class LiveMatchesBlock extends StatelessWidget {
   final List<LiveEvent> events;
@@ -8,51 +10,27 @@ class LiveMatchesBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (events.isEmpty) return const SizedBox();
+    if (events.isEmpty) {
+      return Text(
+        "No live matches",
+        style: TextStyle(
+          color: Colors.white54,
+          fontSize: 13.sp,
+        ),
+      );
+    }
 
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: const Color(0xFF7ED957), // green
-        borderRadius: BorderRadius.circular(24),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          const Text(
-            'LIVE\nMATCHES',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.w900,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              children: events.map(_eventRow).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _eventRow(LiveEvent event) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Text(
-        '• ${event.teamA} vs ${event.teamB} @ ${event.venue}',
-        style: const TextStyle(fontSize: 14),
-      ),
+    return Column(
+      children: events.map((e) {
+        return EventCard(
+          teamA: e.teamA,
+          teamB: e.teamB,
+          venue: e.venue,
+          timeText: "",
+          isLive: true,
+        );
+      }).toList(),
     );
   }
 }
+

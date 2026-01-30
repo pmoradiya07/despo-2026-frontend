@@ -66,21 +66,30 @@ class LiveEvent {
 
     return LiveEvent(
       id: doc.id,
-      sport: data['sport'],
-      title: data['title'],
-      teamA: data['teamA'],
-      teamB: data['teamB'],
+     sport: (data['sport'] as String?) ?? '',
+     title: (data['title'] as String?) ?? '',
+     teamA: (data['teamA'] as String?) ?? '',
+     teamB: (data['teamB'] as String?) ?? '',
+     venue: (data['venue'] as String?) ?? '',
+
       startTime: (data['startTime'] as Timestamp?)?.toDate()
           ?? DateTime.fromMillisecondsSinceEpoch(0),
 
       endTime: (data['endTime'] as Timestamp?)?.toDate()
           ?? DateTime.fromMillisecondsSinceEpoch(0),
 
-      status: data['status'],
-      venue: data['venue'],
-      isVisible: data['isVisible'],
+      status: (data['status'] as String?) ?? 'upcoming',
+      isVisible: (data['isVisible'] as bool?) ?? true,
     );
   }
+
+  ComputedEventStatus get computedStatus {
+  return computeEventStatus(
+    startTime: startTime,
+    endTime: endTime,
+  );
+}
+
 
   Map<String, dynamic> toFirestore() {
     return {
@@ -96,6 +105,26 @@ class LiveEvent {
     };
   }
 }
+
+enum ComputedEventStatus { upcoming, live, ended }
+
+ComputedEventStatus computeEventStatus({
+  required DateTime startTime,
+  required DateTime endTime,
+}) {
+  final now = DateTime.now();
+
+  if (now.isBefore(startTime)) {
+    return ComputedEventStatus.upcoming;
+  }
+
+  if (now.isAfter(endTime)) {
+    return ComputedEventStatus.ended;
+  }
+
+  return ComputedEventStatus.live;
+}
+
 
 /// =======================
 /// SERVICE (ADMIN ONLY)

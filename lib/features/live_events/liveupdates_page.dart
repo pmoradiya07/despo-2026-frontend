@@ -89,9 +89,10 @@ class LiveUpdates extends ConsumerWidget {
                   child: Column(
                     children: [
                       /// LIVE MATCHES
+                      sectionHeader("LIVE"),
+
                       liveEvents.when(
-                        data: (events) =>
-                            LiveMatchesBlock(events: events),
+                        data: (events) => LiveMatchesBlock(events: events),
                         loading: () => const CircularProgressIndicator(),
                         error: (e, _) => Text(
                           e.toString(),
@@ -99,9 +100,11 @@ class LiveUpdates extends ConsumerWidget {
                         ),
                       ),
 
-                      SizedBox(height: 32.h),
+                      SizedBox(height: 24.h),
 
                       /// UPCOMING MATCHES
+                      sectionHeader("UPCOMING"),
+
                       upcomingEvents.when(
                         data: (events) =>
                             UpcomingMatchesBlock(events: events),
@@ -124,6 +127,34 @@ class LiveUpdates extends ConsumerWidget {
     );
   }
 }
+
+Widget sectionHeader(String title) {
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: 12.h),
+    child: Row(
+      children: [
+        Container(
+          width: 4.w,
+          height: 20.h,
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFBE26),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        SizedBox(width: 8.w),
+        Text(
+          title,
+          style: GoogleFonts.jersey10(
+            fontSize: 18.sp,
+            color: Colors.white,
+            letterSpacing: 1.2,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 
 class PixelDashLine extends StatelessWidget {
   const PixelDashLine({super.key});

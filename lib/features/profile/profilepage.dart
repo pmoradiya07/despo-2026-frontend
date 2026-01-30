@@ -100,7 +100,7 @@ class ProfileScreen extends StatelessWidget {
 
                 SizedBox(height: 30.h),
 
-                GestureDetector(
+                GestureDetector( //PANTH ISKO HATA DENA PUBLIC VERSION MAIN
                   onTap: () {
                     Navigator.pushNamed(context, '/admin');
                   },
