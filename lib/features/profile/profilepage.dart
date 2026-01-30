@@ -100,12 +100,12 @@ class ProfileScreen extends StatelessWidget {
 
                 SizedBox(height: 30.h),
 
-                GestureDetector( //PANTH ISKO HATA DENA PUBLIC VERSION MAIN
-                  onTap: () {
-                    Navigator.pushNamed(context, '/admin');
-                  },
-                  child: Image.asset("assets/images/admin.png"),
-                ),
+                // GestureDetector( //PANTH ISKO HATA DENA PUBLIC VERSION MAIN
+                //   onTap: () {
+                //     Navigator.pushNamed(context, '/admin');
+                //   },
+                //   child: Image.asset("assets/images/admin.png"),
+                // ),
 
                 SizedBox(height: 10.h),
 
