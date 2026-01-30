@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AdminNotificationService {
-  static const String _baseUrl = 'http://localhost:3000/api';
+  static const String _baseUrl = 'http://localhost:3000/api'; //PANTH ISKO CHANGE KARNA
 
   static Future<void> sendNotification({
     required String title,

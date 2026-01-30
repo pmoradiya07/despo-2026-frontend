@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'features/admin/LiveEventsScheduler.dart';
 import 'features/admin/notifications_scheduler.dart';
-import 'features/notifications/notification_bridge.dart';
+import 'features/notifications/notification_bridge_stub.dart' if (dart.library.io) 'features/notifications/notification_bridge_mobile.dart';
 import 'features/splash/splashScreen.dart';
 import 'firebase_options.dart';
 
@@ -21,22 +21,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // ✅ REQUIRED FOR iOS SAFARI GOOGLE SIGN-IN
-  if (kIsWeb) {
-    await FirebaseAuth.instance.getRedirectResult();
-  }
-
-  final providerContainer = ProviderContainer();
-  NotificationsBridge.register(providerContainer);
-  await FirebaseService.init();
-
-  runApp(
-    UncontrolledProviderScope(
-      container: providerContainer,
-      child: const AppRoot(),
-    ),
-  );
+  runApp(const AppRoot());
 }
+
 
 class AppRoot extends StatelessWidget {
   const AppRoot({super.key});
@@ -50,7 +37,7 @@ class AppRoot extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: const SplashScreen(),
+          home: const AuthGate(),
           routes: {
             '/auth': (_) => const AuthGate(),
             '/admin': (_) => const AdminPage(),

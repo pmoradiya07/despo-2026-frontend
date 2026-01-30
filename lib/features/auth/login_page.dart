@@ -21,18 +21,18 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     // Handle Web redirect result if user returns from Google login
-    if (kIsWeb) _handleWebRedirect();
+    // if (kIsWeb) _handleWebRedirect();
   }
 
-  Future<void> _handleWebRedirect() async {
-    final userCredential = await _authService.handleWebRedirectResult();
-    if (userCredential?.user != null && mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const AppShell()),
-      );
-    }
-  }
+  // Future<void> _handleWebRedirect() async {
+   // final userCredential = await _authService.handleWebRedirectResult();
+  //   if (userCredential?.user != null && mounted) {
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(builder: (_) => const AppShell()),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -112,47 +112,31 @@ class _LoginScreenState extends State<LoginScreen> {
                           onTap: _isLoading
                               ? null
                               : () async {
-                                  setState(() => _isLoading = true);
-                                  try {
-                                    if (kIsWeb) {
-                                      // Web: trigger redirect
-                                      await _authService.signInWithGoogle();
-                                      // Redirect result will be handled in initState
-                                    } else {
-                                      // Mobile: direct sign-in
-                                      final userCredential =
-                                          await _authService.signInWithGoogleMobile();
-                                      if (userCredential?.user != null && mounted) {
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => const AppShell()),
-                                        );
-                                      } else {
-                                        if (mounted) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  "Google sign-in failed or cancelled"),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                        }
-                                      }
-                                    }
-                                  } catch (e) {
-                                    if (mounted) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text("Google sign-in failed: $e"),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                      );
-                                    }
-                                  } finally {
-                                    if (mounted) setState(() => _isLoading = false);
-                                  }
-                                },
+                            setState(() => _isLoading = true);
+                            try {
+                              if (kIsWeb) {
+                                // Web: redirect-based sign-in
+                                await _authService.signInWithGoogle();
+                                return; // execution ends due to redirect
+                              } else {
+                                // Mobile: native sign-in
+                                await _authService.signInWithGoogleMobile();
+                                // ❌ NO navigation here
+                                // AuthGate will rebuild automatically
+                              }
+                            } catch (e) {
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Google sign-in failed: $e"),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            } finally {
+                              if (mounted) setState(() => _isLoading = false);
+                            }
+                          },
                           child: SizedBox(
                             width: 225.w,
                             height: 46.h,
@@ -179,14 +163,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ],
                                 ),
                                 if (_isLoading)
-                                  const Positioned(
-                                    child: SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                        strokeWidth: 2,
-                                      ),
+                                  const SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
                                     ),
                                   )
                                 else
@@ -206,6 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
+
                       ),
                       Center(
                         child: Text(
